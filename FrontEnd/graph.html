@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ocean Insights</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#1193d4",
+            "background-light": "rgb(224 233 241);",
+            "background-dark": "#101c22",
+            "accent": "#d97706"},
+          fontFamily: {
+            "display": ["Space Grotesk", "sans-serif"]
+          },
+        },
+      },
+    }
+</script>
+<style>
+    /* CSS MODIFIÉ (IDENTIQUE À LANDING_PAGE) */
+    .transition-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        z-index: 9999;
+        pointer-events: none;
+        display: flex;
+        filter: url('#goo'); 
+        padding: 0 -10px; 
+    }
+
+    .transition-strip {
+        flex: 1;
+        height: 100%;
+        background-color: #101c22;
+        transform: scaleY(0);
+        transform-origin: top;
+        /* Suppression des bordures */
+        /* border-right: 1px solid rgba(255,255,255,0.05); */
+        /* Ajout des marges négatives */
+        margin: 0 -5px;
+    }
+
+    .chart-bar-1 { height: 70%; }
+    .chart-bar-2 { height: 20%; }
+    .chart-bar-3 { height: 90%; }
+    .chart-bar-4 { height: 40%; }
+    .chart-bar-5 { height: 90%; }
+    .horizontal-bar-1 { width: 30%; }
+    .horizontal-bar-2 { width: 70%; }
+    .horizontal-bar-3 { width: 100%; }
+    .horizontal-bar-4 { width: 60%; }
+    .horizontal-bar-5 { width: 100%; }
+</style>
+</head>
+<body data-barba="wrapper" class="bg-background-light dark:bg-background-dark font-display text-gray-800 dark:text-gray-200">
+
+    <svg style="visibility: hidden; position: absolute;" width="0" height="0" xmlns="http://www.w3.org/2000/svg" version="1.1">
+        <defs>
+            <filter id="goo">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="15" result="blur" />    
+                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 25 -9" result="goo" />
+                <feComposite in="SourceGraphic" in2="goo" operator="atop"/>
+            </filter>
+        </defs>
+    </svg>
+
+    <div class="transition-overlay">
+        <div class="transition-strip"></div>
+        <div class="transition-strip"></div>
+        <div class="transition-strip"></div>
+        <div class="transition-strip"></div>
+        <div class="transition-strip"></div>
+        <div class="transition-strip"></div>
+        <div class="transition-strip"></div>
+    </div>
+
+    <div data-barba="container" data-barba-namespace="graph" class="flex flex-col min-h-screen">
+        <header class="bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm sticky top-0 z-50 border-b border-gray-200 dark:border-gray-800">
+            <div class="container mx-auto px-6 lg:px-10">
+                <div class="flex items-center justify-between h-20">
+                    <div class="flex items-center gap-3 text-primary">
+                        <div class="size-8">
+                            <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_6_319)">
+                                <path d="M8.57829 8.57829C5.52816 11.6284 3.451 15.5145 2.60947 19.7452C1.76794 23.9758 2.19984 28.361 3.85056 32.3462C5.50128 36.3314 8.29667 39.7376 11.8832 42.134C15.4698 44.5305 19.6865 45.8096 24 45.8096C28.3135 45.8096 32.5302 44.5305 36.1168 42.134C39.7033 39.7375 42.4987 36.3314 44.1494 32.3462C45.8002 28.361 46.2321 23.9758 45.3905 19.7452C44.549 15.5145 42.4718 11.6284 39.4217 8.57829L24 24L8.57829 8.57829Z" fill="currentColor"></path>
+                                </g>
+                                <defs>
+                                <clipPath id="clip0_6_319">
+                                <rect fill="white" height="48" width="48"></rect>
+                                </clipPath>
+                                </defs>
+                            </svg>
+                        </div>
+                        <h2 class="text-xl font-bold">AquaVision</h2>
+                    </div>
+                    <nav class="hidden md:flex items-center gap-8">
+                        <a class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors" href="landing_page.html">Accueil</a>
+                        <a class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors" href="map.html">Carte Interactive</a>
+                    </nav>
+                    <div class="flex items-center gap-4"></div>
+                </div>
+            </div>
+        </header>
+        
+        <main class="flex-1">
+            <div class="container mx-auto px-6 lg:px-10 py-12">
+                <div class="flex flex-col md:flex-row justify-between items-start gap-4 mb-8">
+                    <div class="max-w-xl">
+                        <h2 class="text-4xl font-bold tracking-tighter text-gray-900 dark:text-white">Visualisation de données marines</h2>
+                        <p class="mt-2 text-base text-gray-600 dark:text-gray-400">Explorez les données mise a dispo par notre projet dont les données sont issus de NOAA.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-3 mt-4 md:mt-0">
+                        <button class="flex h-10 items-center gap-x-2 rounded bg-white/50 dark:bg-background-dark border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 px-4 text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors">Date Range</button>
+                        <button class="flex h-10 items-center gap-x-2 rounded bg-white/50 dark:bg-background-dark border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 px-4 text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors">Location</button>
+                        <button class="flex h-10 items-center gap-x-2 rounded bg-white/50 dark:bg-background-dark border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 px-4 text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors">Data Type</button>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="flex flex-col rounded-lg border border-gray-200 dark:border-gray-800 bg-white/50 dark:bg-background-dark/50 p-6">
+                        <h3 class="text-base font-semibold text-gray-800 dark:text-gray-200">Chlorophylle-a (mg/m3)</h3>
+                        <p class="text-4xl font-bold text-gray-900 dark:text-white mt-1">12,34</p>
+                        <div class="flex items-center gap-2 mt-1"><p class="text-sm text-gray-500 dark:text-gray-400">30 derniers jours</p><p class="text-sm font-medium text-green-500">+5%</p></div>
+                        <div class="flex-1 grid min-h-[200px] grid-flow-col gap-4 items-end justify-items-center pt-6 px-3">
+                             <div class="w-full flex flex-col items-center gap-2"><div class="w-full bg-primary/20 dark:bg-primary/30 rounded-t chart-bar-1"></div><p class="text-xs font-bold text-gray-500 tracking-wider"> Balise A</p></div>
+                             <div class="w-full flex flex-col items-center gap-2"><div class="w-full bg-primary/20 dark:bg-primary/30 rounded-t chart-bar-2"></div><p class="text-xs font-bold text-gray-500 tracking-wider">Balise B</p></div>
+                             <div class="w-full flex flex-col items-center gap-2"><div class="w-full bg-primary rounded-t chart-bar-3"></div><p class="text-xs font-bold text-gray-500 tracking-wider">Balise C</p></div>
+                             <div class="w-full flex flex-col items-center gap-2"><div class="w-full bg-primary/20 dark:bg-primary/30 rounded-t chart-bar-4"></div><p class="text-xs font-bold text-gray-500 tracking-wider">Balise D</p></div>
+                             <div class="w-full flex flex-col items-center gap-2"><div class="w-full bg-primary/60 dark:bg-primary/70 rounded-t chart-bar-5"></div><p class="text-xs font-bold text-gray-500 tracking-wider">Balise E</p></div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col rounded-lg border border-gray-200 dark:border-gray-800 bg-white/50 dark:bg-background-dark/50 p-6">
+                         <h3 class="text-base font-semibold text-gray-800 dark:text-gray-200">Temperature</h3>
+                         <p class="text-4xl font-bold text-gray-900 dark:text-white mt-1">22°C</p>
+                         <div class="flex items-center gap-2 mt-1"><p class="text-sm text-gray-500 dark:text-gray-400">année précedente</p><p class="text-sm font-medium text-red-500">-2%</p></div>
+                         <div class="flex-1 flex flex-col justify-end min-h-[200px] pt-6">
+                             <svg fill="none" height="150" preserveAspectRatio="none" viewBox="0 0 472 150" width="100%" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M0 109C18.1538 109 18.1538 21 36.3077 21C54.4615 21 54.4615 41 72.6154 41C90.7692 41 90.7692 93 108.923 93C127.077 93 127.077 33 145.231 33C163.385 33 163.385 101 181.538 101C199.692 101 199.692 61 217.846 61C236 61 236 45 254.154 45C272.308 45 272.308 121 290.462 121C308.615 121 308.615 149 326.769 149C344.923 149 344.923 1 363.077 1C381.231 1 381.231 81 399.385 81C417.538 81 417.538 129 435.692 129C453.846 129 453.846 25 472 25" stroke="#1193d4" stroke-linecap="round" stroke-width="3"></path>
+                             </svg>
+                             <div class="flex justify-between mt-2"><p class="text-xs font-bold text-gray-500 tracking-wider">Jan</p><p class="text-xs font-bold text-gray-500 tracking-wider">Feb</p><p class="text-xs font-bold text-gray-500 tracking-wider">Mar</p><p class="text-xs font-bold text-gray-500 tracking-wider">Apr</p><p class="text-xs font-bold text-gray-500 tracking-wider">May</p><p class="text-xs font-bold text-gray-500 tracking-wider">Jun</p><p class="text-xs font-bold text-gray-500 tracking-wider">Jul</p></div>
+                         </div>
+                    </div>
+                    <div class="flex flex-col rounded-lg border border-gray-200 dark:border-gray-800 bg-white/50 dark:bg-background-dark/50 p-6">
+                        <h3 class="text-base font-semibold text-gray-800 dark:text-gray-200">Taux de salinité par mers</h3>
+                        <p class="text-4xl font-bold text-gray-900 dark:text-white mt-1">15 mg/L</p>
+                        <div class="flex items-center gap-2 mt-1"><p class="text-sm text-gray-500 dark:text-gray-400">Mois actuelle</p><p class="text-sm font-medium text-green-500">+10%</p></div>
+                        <div class="flex-1 grid grid-cols-[auto_1fr] gap-x-4 gap-y-4 items-center min-h-[200px] pt-6">
+                             <p class="text-xs font-bold text-gray-500">Mer 1</p><div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5"><div class="bg-primary h-2.5 rounded-full horizontal-bar-1"></div></div>
+                             <p class="text-xs font-bold text-gray-500">Mer 2</p><div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5"><div class="bg-primary h-2.5 rounded-full horizontal-bar-2"></div></div>
+                             <p class="text-xs font-bold text-gray-500">Mer 3</p><div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5"><div class="bg-accent h-2.5 rounded-full horizontal-bar-3"></div></div>
+                             <p class="text-xs font-bold text-gray-500">Mer 4</p><div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5"><div class="bg-primary h-2.5 rounded-full horizontal-bar-4"></div></div>
+                             <p class="text-xs font-bold text-gray-500">Mer 5</p><div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5"><div class="bg-accent h-2.5 rounded-full horizontal-bar-5"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://unpkg.com/@barba/core"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script>
+        // SCRIPTS IDENTIQUES À LANDING_PAGE
+        barba.init({
+            sync: true,
+            transitions: [{
+                name: 'transition-curtain',
+                leave(data) {
+                    const done = this.async();
+                    gsap.to('.transition-strip', {
+                        scaleY: 1,
+                        transformOrigin: 'top',
+                        stagger: { each: 0.08, from: "random" },
+                        duration: 0.8,
+                        ease: 'power3.inOut',
+                        onComplete: done
+                    });
+                },
+                enter(data) {
+                    gsap.set('.transition-strip', { transformOrigin: 'bottom', scaleY: 1 });
+                    gsap.to('.transition-strip', {
+                        scaleY: 0,
+                        stagger: { each: 0.05, from: "end" },
+                        duration: 0.8,
+                        delay: 0.1,
+                        ease: 'power3.inOut'
+                    });
+                }
+            }]
+        });
+    </script>
+</body>
+</html>
