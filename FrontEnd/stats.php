@@ -130,7 +130,7 @@ $date_fin = isset($_GET['date_fin']) ? htmlspecialchars($_GET['date_fin']) : nul
 
             <nav class="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-8">
                 <a class="nav-roll text-sm font-medium text-gray-800 dark:text-gray-200" href="landing_page.html" data-text="Accueil" data-barba-prevent><span>Accueil</span></a>
-                <a class="nav-roll text-sm font-medium text-gray-800 dark:text-gray-200" href="#" data-text="Carte Interactive"><span>Carte Interactive</span></a>
+                <a class="nav-roll text-sm font-medium text-gray-800 dark:text-gray-200" href="map.html" data-text="Carte Interactive" ><span>Carte Interactive</span></a>
                 <a class="nav-roll text-sm font-medium text-gray-800 dark:text-gray-200" href="stats.php" data-text="Graphiques"><span>Graphiques</span></a>
                 <a class="nav-roll text-sm font-medium text-gray-800 dark:text-gray-200" href="Sources.html" data-text="Sources"><span>Sources</span></a>
             </nav>
@@ -145,6 +145,11 @@ $date_fin = isset($_GET['date_fin']) ? htmlspecialchars($_GET['date_fin']) : nul
                     <p class="text-lg text-gray-600 dark:text-gray-400">Analyse des données environnementales</p>
                 </div>
 
+
+                <!-- Bouton de prévision (Step 1 corrigée) -->
+                <div class="flex justify-end mb-4">
+                    <button type="button" id="btn-prevision" class="px-4 py-2 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all dark:bg-background-dark dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800">Activer le mode prévision</button>
+                </div>
                 <!-- Formulaire -->
                 <div class="bg-white/50 dark:bg-background-dark/50 border border-gray-200 dark:border-gray-800 rounded-2xl p-8 mb-12 shadow-sm backdrop-blur-sm">
                     <div class="mb-6 border-b border-gray-200 dark:border-gray-700 pb-4">
@@ -255,6 +260,39 @@ $date_fin = isset($_GET['date_fin']) ? htmlspecialchars($_GET['date_fin']) : nul
                 inputFin.addEventListener('change', function () { inputDebut.max = this.value; });
             }
 
+            // --- STEP 2 : Logique du Mode Prévision ---
+            const btnPrevision = document.getElementById('btn-prevision');
+            if (btnPrevision && inputDebut && inputFin) {
+                let isPredictionMode = false;
+                const today = new Date().toISOString().split('T')[0];
+
+                btnPrevision.onclick = function() {
+                    isPredictionMode = !isPredictionMode;
+
+                    if (isPredictionMode) {
+                        // Mode ACTIF : On change le style et on enlève les limites
+                        this.textContent = "Désactiver le mode prévision";
+                        this.classList.remove('bg-white', 'text-gray-700', 'border-gray-300');
+                        this.classList.add('bg-primary', 'text-white', 'border-primary', 'hover:bg-primary/90');
+                        
+                        inputDebut.removeAttribute('max');
+                        inputFin.removeAttribute('max');
+                    } else {
+                        // Mode INACTIF : On remet le style neutre et la date max à aujourd'hui
+                        this.textContent = "Activer le mode prévision";
+                        this.classList.remove('bg-primary', 'text-white', 'border-primary', 'hover:bg-primary/90');
+                        this.classList.add('bg-white', 'text-gray-700', 'border-gray-300');
+
+                        inputDebut.setAttribute('max', today);
+                        inputFin.setAttribute('max', today);
+
+                        // Sécurité : Si une date future était sélectionnée, on la remet à aujourd'hui
+                        if (inputDebut.value > today) inputDebut.value = today;
+                        if (inputFin.value > today) inputFin.value = today;
+                    }
+                };
+            }
+
             // C. Dessiner les graphiques SI une zone et des dates sont sélectionnées
             if (zone && dateDebut && dateFin) {
                 const url = `${API_BASE_URL}/stats?zone=${zone}&date_debut=${dateDebut}&date_fin=${dateFin}`;
@@ -324,7 +362,6 @@ $date_fin = isset($_GET['date_fin']) ? htmlspecialchars($_GET['date_fin']) : nul
             }
         };
 
-        // --- 3. EXÉCUTION IMMÉDIATE ---
         window.chargerDonneesEtGraphiques();
 
         // --- 4. CONFIGURATION BARBA ---
@@ -333,14 +370,32 @@ $date_fin = isset($_GET['date_fin']) ? htmlspecialchars($_GET['date_fin']) : nul
                 transitions: [{
                     name: 'fade',
                     namespace: 'stats',
+                    leave(data) {
+                        const done = this.async();
+                        gsap.to('.transition-strip', {
+                            scaleY: 1,
+                            transformOrigin: 'top',
+                            stagger: { each: 0.08, from: "random" },
+                            duration: 0.8,
+                            ease: 'power3.inOut',
+                            onComplete: done
+                        });
+                    },
                     afterEnter(data) {
                         // Recharger les graphiques après la transition
                         window.chargerDonneesEtGraphiques();
                     },
                     enter(data) {
+                        if (data.next.namespace === 'home') {
+                            gsap.set(data.next.container.querySelectorAll('#site-header, #hero-content'), { opacity: 1 });
+                        }
                         gsap.set('.transition-strip', { transformOrigin: 'bottom', scaleY: 1 });
                         gsap.to('.transition-strip', {
-                            scaleY: 0, stagger: 0.05, duration: 0.5, delay: 0.1
+                            scaleY: 0,
+                            stagger: { each: 0.05, from: "end" },
+                            duration: 0.8,
+                            delay: 0.1,
+                            ease: 'power3.inOut'
                         });
                     }
                 }]
