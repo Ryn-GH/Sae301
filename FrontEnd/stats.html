@@ -147,10 +147,8 @@
 
                 <script>
                 (function () {
-                    // IMPORTANT : Mets ici la future URL de ton backend AlwaysData quand tu l'auras
-                    // Pour l'instant on garde le localhost pour tes tests en local, mais sur Vercel ça échouera (normal)
-                    // const API_BASE_URL = 'https://ton-login.alwaysdata.net/api'; 
-                    const API_BASE_URL = 'http://localhost/sae301/erddap-api/public/api';
+                    // IMPORTANT : Mets ici la future URL de ton backend render 
+                    const API_BASE_URL = 'https://sae301.onrender.com/api';
                 
                     // --- 1. RECUPERATION DES PARAMETRES VIA JS (Remplaçant le PHP) ---
                     const urlParams = new URLSearchParams(window.location.search);
