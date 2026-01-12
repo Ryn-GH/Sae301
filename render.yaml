@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: sae301-api
+    name: sae301
     env: php
     rootDir: erddap-api
     region: frankfurt
