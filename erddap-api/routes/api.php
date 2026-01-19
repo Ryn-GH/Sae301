@@ -22,3 +22,11 @@ Route::middleware('api')->group(function () {
     return response()->json($zones)->header('Access-Control-Allow-Origin', '*');
     });
 });
+
+Route::middleware('api')->group(function () {
+    // Route pour un point spécifique (Appel NOAA + Cache)
+    Route::get('/datasets/{datasetId}', [DataController::class, 'getDatasetData']);
+
+    // NOUVELLE ROUTE : Pour récupérer tous les points stockés en BDD
+    Route::get('/map-points', [DataController::class, 'getAllStoredPoints']);
+});

@@ -338,4 +338,23 @@ class DataController extends Controller
             'chlorophylle' => $chlorophylle
         ])->header('Access-Control-Allow-Origin', '*');
     }
+
+    public function getAllStoredPoints()
+    {
+        try {
+            // On récupère tous les points avec leurs mesures associées
+            $points = PointMesure::with(['temperature', 'salinite'])->get();
+
+            return response()->json([
+                'status' => 'success',
+                'count' => $points->count(),
+                'points' => $points
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
 }
