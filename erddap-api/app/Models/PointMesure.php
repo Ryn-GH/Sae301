@@ -9,7 +9,7 @@ class PointMesure extends Model
 {
     use HasFactory;
 
-    // Assurez-vous que le nom de la table est correct (sae3.01_pointmesure ou pointmesure)
+    // Sur Linux/Render, la casse est importante. Utilisez le nom EXACT de la table TiDB.
     protected $table = 'pointmesure'; 
     protected $primaryKey = 'PM_id';
     public $timestamps = false; // Pas de created_at/updated_at
