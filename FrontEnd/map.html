@@ -178,7 +178,7 @@
           data-text="Accueil" data-barba-prevent><span>Accueil</span></a>
         <a class="nav-roll text-sm font-medium text-gray-800 dark:text-gray-200" href="map.html"
           data-text="Carte Interactive"><span>Carte Interactive</span></a>
-        <a class="nav-roll text-sm font-medium text-gray-800 dark:text-gray-200" href="stats.php"
+        <a class="nav-roll text-sm font-medium text-gray-800 dark:text-gray-200" href="stats.html"
           data-text="Graphiques"><span>Graphiques</span></a>
         <a class="nav-roll text-sm font-medium text-gray-800 dark:text-gray-200" href="Sources.html"
           data-text="Sources"><span>Sources</span></a>
@@ -187,108 +187,116 @@
       </div>
     </header>
 
-    <main class="flex-grow relative overflow-hidden">
-      <!-- La carte occupe maintenant tout l'espace disponible -->
-      <div id="map" class="absolute inset-0 w-full h-full"></div>
+    <!-- ... (Gardez votre Head et Style existants) ... -->
+<main class="flex-grow relative overflow-hidden">
+    <div id="map" class="absolute inset-0 w-full h-full"></div>
 
-      <!-- Remplacez uniquement la partie <script> à l'intérieur du <main> par celle-ci -->
-<script>
-(function() {
-    // Configuration Mapbox
-    mapboxgl.accessToken = 'pk.eyJ1IjoibHVjYTkxIiwiYSI6ImNta2F6emphbzF5bmwzY3F4MHUwYTdtcDQifQ.vJe-Rgu9f41PPChPOVG9qg';
-    
-    // URL de votre API sur Render (À adapter avec votre vraie URL Render)
-    const API_BASE_URL = 'https://sae301.onrender.com/api'; 
-
-    const map = new mapboxgl.Map({
-        container: 'map',
-        style: 'mapbox://styles/mapbox/dark-v11',
-        center: [-5, 45], 
-        zoom: 4,
-        pitch: 45
-    });
-
-    // Fonction pour créer un marqueur sur la carte
-    function createMarker(lat, lng, data, isNew = false) {
-        const el = document.createElement('div');
-        el.className = 'buoy-marker';
-        el.innerHTML = `
-            <svg class="buoy-icon" width="30" height="30" viewBox="0 0 40 40">
-                <circle cx="20" cy="30" r="5" fill="${isNew ? '#10b981' : '#1193d4'}" />
-                <path d="M20 5 L26 25 L14 25 Z" fill="${isNew ? '#10b981' : '#ef4444'}" />
-            </svg>
-        `;
-
-        const temp = data.temperature ? data.temperature.temperature : 'N/A';
-        const salt = data.salinite ? data.salinite.sss : 'N/A';
-        const date = new Date(data.dateMesure).toLocaleDateString();
-
-        new mapboxgl.Marker(el)
-            .setLngLat([lng, lat])
-            .setPopup(new mapboxgl.Popup({ offset: 25 })
-                .setHTML(`
-                    <div class="p-2 text-gray-800">
-                        <h3 class="font-bold border-b mb-1">Point Mesure</h3>
-                        <p class="text-[10px] text-gray-500">Date : ${date}</p>
-                        <div class="mt-2 space-y-1">
-                            <p class="text-sm">Température : <span class="font-bold text-blue-600">${temp} °C</span></p>
-                            <p class="text-sm">Salinité : <span class="font-bold text-teal-600">${salt} PSU</span></p>
-                        </div>
-                    </div>
-                `))
-            .addTo(map);
-    }
-
-    // 1. Charger les points existants au démarrage
-    async function loadExistingPoints() {
-        try {
-            const response = await fetch(`${API_BASE_URL}/map-points`);
-            const result = await response.json();
-            
-            if(result.points) {
-                result.points.forEach(p => {
-                    createMarker(parseFloat(p.latitude), parseFloat(p.longitude), p);
-                });
-            }
-        } catch (e) { console.error("Erreur chargement points:", e); }
-    }
-
-    // 2. Cliquer pour obtenir de nouvelles données (NOAA)
-    map.on('click', async (e) => {
-        const { lng, lat } = e.lngLat;
+    <script>
+    (function() {
+        mapboxgl.accessToken = 'pk.eyJ1IjoibHVjYTkxIiwiYSI6ImNta2F6emphbzF5bmwzY3F4MHUwYTdtcDQifQ.vJe-Rgu9f41PPChPOVG9qg';
         
-        // On crée un marqueur temporaire de chargement
-        const loadingEl = document.createElement('div');
-        loadingEl.innerHTML = '<div class="animate-ping size-4 bg-white rounded-full"></div>';
-        const tempMarker = new mapboxgl.Marker(loadingEl).setLngLat([lng, lat]).addTo(map);
+        const API_BASE_URL = 'https://sae301.onrender.com/api'; 
 
-        try {
-            // On interroge le dataset de température par défaut
-            const response = await fetch(`${API_BASE_URL}/datasets/noaacwBLENDEDsstDNDaily?latMin=${lat.toFixed(2)}&lonMin=${lng.toFixed(2)}`);
-            const result = await response.json();
-            
-            tempMarker.remove(); // On enlève le point de chargement
+        const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/dark-v11',
+            center: [-5, 45], 
+            zoom: 4,
+            pitch: 45
+        });
 
-            if(result.data) {
-                // On simule une structure pour createMarker
-                const mockData = {
-                    dateMesure: result.data.date,
-                    temperature: { temperature: result.data.valeur },
-                    salinite: null // On pourrait faire un 2ème appel pour la salinité ici
-                };
-                createMarker(lat, lng, mockData, true);
-            }
-        } catch (err) {
-            tempMarker.remove();
-            console.error("Erreur NOAA:", err);
+        function createMarker(lat, lng, data, isNew = false) {
+            const el = document.createElement('div');
+            el.className = 'buoy-marker';
+            el.innerHTML = `
+                <svg class="buoy-icon" width="30" height="30" viewBox="0 0 40 40">
+                    <circle cx="20" cy="30" r="5" fill="${isNew ? '#10b981' : '#1193d4'}" />
+                    <path d="M20 5 L26 25 L14 25 Z" fill="${isNew ? '#10b981' : '#ef4444'}" />
+                </svg>
+            `;
+
+            // On vérifie la structure JSON renvoyée par Laravel (with eager loading)
+            const temp = (data.temperature && data.temperature.temperature !== null) ? data.temperature.temperature : 'N/A';
+            const salt = (data.salinite && data.salinite.sss !== null) ? data.salinite.sss : 'N/A';
+            const date = new Date(data.dateMesure).toLocaleDateString();
+
+            new mapboxgl.Marker(el)
+                .setLngLat([lng, lat])
+                .setPopup(new mapboxgl.Popup({ offset: 25 })
+                    .setHTML(`
+                        <div class="p-2 text-gray-800">
+                            <h3 class="font-bold border-b mb-1">Point de mesure</h3>
+                            <p class="text-[10px] text-gray-500">Date: ${date}</p>
+                            <div class="mt-2 text-sm">
+                                <p>Temp: <span class="font-bold text-blue-600">${temp} °C</span></p>
+                                <p>Sel: <span class="font-bold text-teal-600">${salt} PSU</span></p>
+                            </div>
+                        </div>
+                    `))
+                .addTo(map);
         }
-    });
 
-    map.on('load', loadExistingPoints);
-    setTimeout(() => { map.resize(); }, 1000);
-})();
-</script>
-    </main>
+        async function loadExistingPoints() {
+            console.log("Chargement des points depuis l'API...");
+            try {
+                const response = await fetch(`${API_BASE_URL}/map-points`, {
+                    headers: { 'Accept': 'application/json' }
+                });
+                const result = await response.json();
+                
+                console.log("Réponse API reçue :", result);
+
+                if(result.points && result.points.length > 0) {
+                    console.log(`${result.points.length} points trouvés. Création des marqueurs...`);
+                    result.points.forEach(p => {
+                        createMarker(parseFloat(p.latitude), parseFloat(p.longitude), p);
+                    });
+                } else {
+                    console.warn("Aucun point trouvé dans la base de données.");
+                }
+            } catch (e) { 
+                console.error("Erreur critique lors du fetch /map-points :", e); 
+            }
+        }
+
+        map.on('load', () => {
+            console.log("Mapbox prêt.");
+            map.resize(); // Force le redimensionnement immédiat
+            loadExistingPoints();
+        });
+
+        // Interaction au clic pour peupler la base de données
+        map.on('click', async (e) => {
+            const { lng, lat } = e.lngLat;
+            console.log(`Clic à Lat: ${lat}, Lng: ${lng}. Appel NOAA...`);
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/datasets/noaacwBLENDEDsstDNDaily?latMin=${lat.toFixed(2)}&lonMin=${lng.toFixed(2)}`, {
+                    headers: { 'Accept': 'application/json' }
+                });
+                const result = await response.json();
+                
+                if(result.data) {
+                    // On simule l'objet pour l'affichage immédiat
+                    const newPoint = {
+                        latitude: lat,
+                        longitude: lng,
+                        dateMesure: result.data.date,
+                        temperature: { temperature: result.data.valeur },
+                        salinite: null
+                    };
+                    createMarker(lat, lng, newPoint, true);
+                }
+            } catch (err) {
+                console.error("Erreur lors de l'appel NOAA au clic :", err);
+            }
+        });
+
+        setTimeout(() => { map.resize(); }, 1000);
+    })();
+    </script>
+</main>
+<!-- ... (Reste du fichier Barba.js) ... -->
   </div>
 
   <script src="https://unpkg.com/@barba/core"></script>
@@ -305,6 +313,11 @@
             }
             document.body.appendChild(script);
         });
+        
+        // Force le redimensionnement de la carte après la transition Barba
+        if (data.next.namespace === 'map') {
+            setTimeout(() => { window.dispatchEvent(new Event('resize')); }, 500);
+        }
     });
 
     barba.init({

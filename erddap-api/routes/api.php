@@ -10,7 +10,12 @@ Route::middleware('api')->group(function () {
     // Route principale pour récupérer les données des datasets
     // Utilise l'ID du dataset (SST ou Salinité) comme paramètre.
     // Exemple : /api/datasets/noaacwSMAPSSSDaily?time=...&latMin=...
+    // Appel NOAA + Cache
     Route::get('/datasets/{datasetId}', [DataController::class, 'getDatasetData']);
+    
+    // Route pour récupérer tous les points stockés en BDD (pour la carte)
+    Route::get('/map-points', [DataController::class, 'getAllStoredPoints']);
+
     Route::get('/stats', [DataController::class, 'getStats']);
     Route::get('/zones', function () {
     // On transforme l'Enum en une liste utilisable par le FrontEnd
@@ -21,12 +26,4 @@ Route::middleware('api')->group(function () {
     ]);
     return response()->json($zones)->header('Access-Control-Allow-Origin', '*');
     });
-});
-
-Route::middleware('api')->group(function () {
-    // Route pour un point spécifique (Appel NOAA + Cache)
-    Route::get('/datasets/{datasetId}', [DataController::class, 'getDatasetData']);
-
-    // NOUVELLE ROUTE : Pour récupérer tous les points stockés en BDD
-    Route::get('/map-points', [DataController::class, 'getAllStoredPoints']);
 });
