@@ -51,6 +51,11 @@ class DataStatsController extends Controller
     {
         \Log::info('API Stats Request reçue:', $request->all());
         
+        // DEBUG: Vérifier la connexion utilisée par Laravel dans les logs Render
+        \Log::error('DEBUG DB CONFIG - Host: ' . config('database.connections.mysql.host'));
+        \Log::error('DEBUG DB CONFIG - Port: ' . config('database.connections.mysql.port'));
+        \Log::error('DEBUG DB CONFIG - Database: ' . config('database.connections.mysql.database'));
+        
         // Augmentation du temps d'exécution pour éviter le timeout 500 sur les longues périodes
         set_time_limit(0);
         ini_set('memory_limit', '1024M');
