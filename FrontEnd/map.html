@@ -17,307 +17,165 @@
       darkMode: "class",
       theme: {
         extend: {
-          colors: {
-            "primary": "#1193d4",
-            "background-light": "rgb(224 233 241);",
-            "background-dark": "#101c22",
-          },
-          fontFamily: {
-            "display": ["Space Grotesk", "sans-serif"]
-          },
-          borderRadius: {
-            "DEFAULT": "0.25rem",
-            "lg": "0.5rem",
-            "xl": "0.75rem",
-            "full": "9999px"
-          },
-        },
-      },
+          colors: { "primary": "#1193d4", "background-light": "rgb(224 233 241);", "background-dark": "#101c22" },
+          fontFamily: { "display": ["Space Grotesk", "sans-serif"] },
+          borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }
+        }
+      }
     }
   </script>
   <style>
-    .background-video {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transform: translate(-50%, -50%);
-      z-index: -1;
-      opacity: 0.15;
-    }
-
-    /* CSS POUR LA TRANSITION (Requis pour Barba.js) */
-    .transition-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100vh;
-      z-index: 9999;
-      pointer-events: none;
-      display: flex;
-      filter: url('#goo');
-      padding: 0 -10px;
-    }
-
-    .transition-strip {
-      flex: 1;
-      height: 100%;
-      background-color: #101c22;
-      transform: scaleY(0);
-      transform-origin: top;
-      margin: 0 -5px;
-    }
-
-    /* Rolling Text Nav */
-    .nav-roll {
-      position: relative;
-      overflow: hidden;
-      display: inline-block;
-      line-height: 1.2;
-      text-decoration: none;
-    }
-
-    .nav-roll span {
-      display: block;
-      transition: transform 0.4s cubic-bezier(0.76, 0, 0.24, 1);
-    }
-
-    .nav-roll::after {
-      content: attr(data-text);
-      position: absolute;
-      top: 100%;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      transition: transform 0.4s cubic-bezier(0.76, 0, 0.24, 1);
-      color: #1193d4;
-    }
-
-    .nav-roll:hover span,
-    .nav-roll:hover::after {
-      transform: translateY(-100%);
-    }
-
-    /* Animations pour les balises et vagues */
-    .buoy-marker {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        cursor: pointer;
-    }
-    .buoy-icon {
-        animation: sway 3s ease-in-out infinite;
-        transform-origin: bottom center;
-    }
-    @keyframes sway {
-        0%, 100% { transform: rotate(-12deg); }
-        50% { transform: rotate(12deg); }
-    }
-    .wave-marker {
-        pointer-events: none;
-    }
-    .wave-icon {
-        animation: wave-pulse 5s ease-in-out infinite;
-    }
-    @keyframes wave-pulse {
-        0%, 100% { transform: scale(0.8); opacity: 0.1; }
-        50% { transform: scale(1.1); opacity: 0.3; }
-    }
+    .background-video { position: absolute; top: 50%; left: 50%; width: 100%; height: 100%; object-fit: cover; transform: translate(-50%, -50%); z-index: -1; opacity: 0.15; }
+    .transition-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: 9999; pointer-events: none; display: flex; filter: url('#goo'); padding: 0 -10px; }
+    .transition-strip { flex: 1; height: 100%; background-color: #101c22; transform: scaleY(0); transform-origin: top; margin: 0 -5px; }
+    .nav-roll { position: relative; overflow: hidden; display: inline-block; line-height: 1.2; text-decoration: none; }
+    .nav-roll span { display: block; transition: transform 0.4s cubic-bezier(0.76, 0, 0.24, 1); }
+    .nav-roll::after { content: attr(data-text); position: absolute; top: 100%; left: 0; width: 100%; height: 100%; transition: transform 0.4s cubic-bezier(0.76, 0, 0.24, 1); color: #1193d4; }
+    .nav-roll:hover span, .nav-roll:hover::after { transform: translateY(-100%); }
+    .mapboxgl-popup-content { border-radius: 12px; color: #1e293b; padding: 15px; border: 1px solid #1193d4; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
   </style>
 </head>
 
-<body data-barba="wrapper"
-  class="bg-background-light dark:bg-background-dark font-display text-gray-800 dark:text-gray-200">
+<body data-barba="wrapper" class="bg-background-light dark:bg-background-dark font-display text-gray-800 dark:text-gray-200">
 
-  <svg style="visibility: hidden; position: absolute;" width="0" height="0" xmlns="http://www.w3.org/2000/svg"
-    version="1.1">
-    <defs>
-      <filter id="goo">
-        <feGaussianBlur in="SourceGraphic" stdDeviation="15" result="blur" />
-        <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 25 -9" result="goo" />
-        <feComposite in="SourceGraphic" in2="goo" operator="atop" />
-      </filter>
-    </defs>
+  <svg style="visibility: hidden; position: absolute;" width="0" height="0" xmlns="http://www.w3.org/2000/svg">
+    <defs><filter id="goo"><feGaussianBlur in="SourceGraphic" stdDeviation="15" result="blur" /><feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 25 -9" result="goo" /><feComposite in="SourceGraphic" in2="goo" operator="atop" /></filter></defs>
   </svg>
 
   <div class="transition-overlay">
-    <div class="transition-strip"></div>
-    <div class="transition-strip"></div>
-    <div class="transition-strip"></div>
-    <div class="transition-strip"></div>
-    <div class="transition-strip"></div>
-    <div class="transition-strip"></div>
-    <div class="transition-strip"></div>
+    <div class="transition-strip"></div><div class="transition-strip"></div><div class="transition-strip"></div><div class="transition-strip"></div><div class="transition-strip"></div><div class="transition-strip"></div><div class="transition-strip"></div>
   </div>
 
   <div data-barba="container" data-barba-namespace="map" class="relative min-h-screen w-full flex flex-col">
-    <header
-      class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between whitespace-nowrap px-10 py-4 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm border-b border-primary/20">
-      <div class="flex items-center gap-3 text-primary">
-        <div class="size-8">
-          <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-            <g clip-path="url(#clip0_6_319)">
-              <path
-                d="M8.57829 8.57829C5.52816 11.6284 3.451 15.5145 2.60947 19.7452C1.76794 23.9758 2.19984 28.361 3.85056 32.3462C5.50128 36.3314 8.29667 39.7376 11.8832 42.134C15.4698 44.5305 19.6865 45.8096 24 45.8096C28.3135 45.8096 32.5302 44.5305 36.1168 42.134C39.7033 39.7375 42.4987 36.3314 44.1494 32.3462C45.8002 28.361 46.2321 23.9758 45.3905 19.7452C44.549 15.5145 42.4718 11.6284 39.4217 8.57829L24 24L8.57829 8.57829Z"
-                fill="currentColor"></path>
-            </g>
-            <defs>
-              <clipPath id="clip0_6_319">
-                <rect fill="white" height="48" width="48"></rect>
-              </clipPath>
-            </defs>
-          </svg>
-        </div>
-        <h2 class="text-xl font-bold">AquaVision</h2>
-      </div>
+    <header class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-10 py-4 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm border-b border-primary/20">
+      <div class="flex items-center gap-3 text-primary"><h2 class="text-xl font-bold">AquaVision</h2></div>
       <nav class="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-8">
-        <a class="nav-roll text-sm font-medium text-gray-800 dark:text-gray-200" href="landing_page.html"
-          data-text="Accueil" data-barba-prevent><span>Accueil</span></a>
-        <a class="nav-roll text-sm font-medium text-gray-800 dark:text-gray-200" href="map.html"
-          data-text="Carte Interactive"><span>Carte Interactive</span></a>
-        <a class="nav-roll text-sm font-medium text-gray-800 dark:text-gray-200" href="stats.html"
-          data-text="Graphiques"><span>Graphiques</span></a>
-        <a class="nav-roll text-sm font-medium text-gray-800 dark:text-gray-200" href="Sources.html"
-          data-text="Sources"><span>Sources</span></a>
+        <a class="nav-roll text-sm font-medium" href="landing_page.html" data-text="Accueil" data-barba-prevent><span>Accueil</span></a>
+        <a class="nav-roll text-sm font-medium" href="map.html" data-text="Carte Interactive"><span>Carte Interactive</span></a>
+        <a class="nav-roll text-sm font-medium" href="stats.php" data-text="Graphiques" data-barba-prevent><span>Graphiques</span></a>
+        <a class="nav-roll text-sm font-medium" href="Sources.html" data-text="Sources"><span>Sources</span></a>
       </nav>
-      <div class="flex items-center gap-2">
-      </div>
     </header>
 
-    <!-- ... (Gardez votre Head et Style existants) ... -->
-<main class="flex-grow relative overflow-hidden">
-    <div id="map" class="absolute inset-0 w-full h-full"></div>
+    <main class="flex-grow relative overflow-hidden">
+      <div id="map" class="absolute inset-0 w-full h-full"></div>
+      <div id="map-loader" class="absolute top-24 left-1/2 -translate-x-1/2 z-50 bg-white/90 dark:bg-slate-800/90 px-4 py-2 rounded-full shadow-lg border border-primary/20 flex items-center gap-3 transition-opacity duration-500 opacity-0 pointer-events-none">
+        <div class="size-4 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+        <span class="text-xs font-medium text-slate-800 dark:text-white">Chargement des données NOAA en cours...</span>
+      </div>
 
-    <script>
-    (function() {
-        mapboxgl.accessToken = 'pk.eyJ1IjoibHVjYTkxIiwiYSI6ImNta2F6emphbzF5bmwzY3F4MHUwYTdtcDQifQ.vJe-Rgu9f41PPChPOVG9qg';
-        
-        const API_BASE_URL = 'https://sae301.onrender.com/api'; 
+      <script>
+        window.initMapPage = function() {
+          console.log("Démarrage de la carte fusionnée...");
+          if (typeof mapboxgl === 'undefined') return;
+          const mapDiv = document.getElementById('map');
+          if (!mapDiv) return;
 
-        const map = new mapboxgl.Map({
+          mapboxgl.accessToken = 'pk.eyJ1IjoibHVjYTkxIiwiYSI6ImNta2F6emphbzF5bmwzY3F4MHUwYTdtcDQifQ.vJe-Rgu9f41PPChPOVG9qg';
+          const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://localhost:8000/api' : 'https://sae301.onrender.com/api';
+
+          const map = new mapboxgl.Map({
             container: 'map',
             style: 'mapbox://styles/mapbox/dark-v11',
-            center: [-5, 45], 
-            zoom: 4,
-            pitch: 45
-        });
+            center: [2, 46],
+            zoom: 5
+          });
 
-        function createMarker(lat, lng, data, isNew = false) {
-            const el = document.createElement('div');
-            el.className = 'buoy-marker';
-            el.innerHTML = `
-                <svg class="buoy-icon" width="30" height="30" viewBox="0 0 40 40">
-                    <circle cx="20" cy="30" r="5" fill="${isNew ? '#10b981' : '#1193d4'}" />
-                    <path d="M20 5 L26 25 L14 25 Z" fill="${isNew ? '#10b981' : '#ef4444'}" />
-                </svg>
-            `;
+          const loader = document.getElementById('map-loader');
 
-            // On vérifie la structure JSON renvoyée par Laravel (with eager loading)
-            const temp = (data.temperature && data.temperature.temperature !== null) ? data.temperature.temperature : 'N/A';
-            const salt = (data.salinite && data.salinite.sss !== null) ? data.salinite.sss : 'N/A';
-            const date = new Date(data.dateMesure).toLocaleDateString();
-
-            new mapboxgl.Marker(el)
-                .setLngLat([lng, lat])
-                .setPopup(new mapboxgl.Popup({ offset: 25 })
-                    .setHTML(`
-                        <div class="p-2 text-gray-800">
-                            <h3 class="font-bold border-b mb-1">Point de mesure</h3>
-                            <p class="text-[10px] text-gray-500">Date: ${date}</p>
-                            <div class="mt-2 text-sm">
-                                <p>Temp: <span class="font-bold text-blue-600">${temp} °C</span></p>
-                                <p>Sel: <span class="font-bold text-teal-600">${salt} PSU</span></p>
-                            </div>
-                        </div>
-                    `))
-                .addTo(map);
-        }
-
-        async function loadExistingPoints() {
-            console.log("Chargement des points depuis l'API...");
+          map.on('load', async () => {
+            if (loader) loader.classList.add('opacity-100');
             try {
-                const response = await fetch(`${API_BASE_URL}/map-points`, {
-                    headers: { 'Accept': 'application/json' }
-                });
-                const result = await response.json();
-                
-                console.log("Réponse API reçue :", result);
+              // On récupère les données NOAA et le Cache en même temps
+              const [resDisc, resCache] = await Promise.all([
+                fetch(`${API_BASE_URL}/map/discovery`),
+                fetch(`${API_BASE_URL}/map-points`)
+              ]);
 
-                if(result.points && result.points.length > 0) {
-                    console.log(`${result.points.length} points trouvés. Création des marqueurs...`);
-                    result.points.forEach(p => {
-                        createMarker(parseFloat(p.latitude), parseFloat(p.longitude), p);
-                    });
-                } else {
-                    console.warn("Aucun point trouvé dans la base de données.");
+              const geoDisc = await resDisc.json();
+              const geoCache = await resCache.json();
+
+              // Fusion des deux sources GeoJSON
+              const combinedFeatures = [
+                ...(geoDisc.features || []),
+                ...(geoCache.features || [])
+              ];
+
+              map.addSource('ocean-data', {
+                type: 'geojson',
+                data: {
+                  type: 'FeatureCollection',
+                  features: combinedFeatures
                 }
-            } catch (e) { 
-                console.error("Erreur critique lors du fetch /map-points :", e); 
-            }
-        }
+              });
 
-        map.on('load', () => {
-            console.log("Mapbox prêt.");
-            map.resize(); // Force le redimensionnement immédiat
-            loadExistingPoints();
-        });
-
-        // Interaction au clic pour peupler la base de données
-        map.on('click', async (e) => {
-            const { lng, lat } = e.lngLat;
-            console.log(`Clic à Lat: ${lat}, Lng: ${lng}. Appel NOAA...`);
-            
-            try {
-                const response = await fetch(`${API_BASE_URL}/datasets/noaacwBLENDEDsstDNDaily?latMin=${lat.toFixed(2)}&lonMin=${lng.toFixed(2)}`, {
-                    headers: { 'Accept': 'application/json' }
-                });
-                const result = await response.json();
-                
-                if(result.data) {
-                    // On simule l'objet pour l'affichage immédiat
-                    const newPoint = {
-                        latitude: lat,
-                        longitude: lng,
-                        dateMesure: result.data.date,
-                        temperature: { temperature: result.data.valeur },
-                        salinite: null
-                    };
-                    createMarker(lat, lng, newPoint, true);
+              // On dessine les points avec des cercles (GPU) pour la fluidité
+              map.addLayer({
+                id: 'points-layer',
+                type: 'circle',
+                source: 'ocean-data',
+                paint: {
+                  'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 4, 10, 12],
+                  'circle-color': '#1193d4',
+                  'circle-stroke-width': 2,
+                  'circle-stroke-color': '#ffffff',
+                  'circle-opacity': 0.8
                 }
+              });
+
+              // Popup fusionnée : Temp, Sel et Chlo
+              map.on('click', 'points-layer', (e) => {
+                const props = e.features[0].properties;
+                
+                // Formatage propre des valeurs
+                const temp = props.temp && props.temp !== 'null' ? `${props.temp} °C` : 'N/A';
+                const salt = props.salt && props.salt !== 'null' ? `${props.salt} PSU` : 'N/A';
+                const chla = props.chla && props.chla !== 'null' ? `${props.chla} mg/m³` : 'N/A';
+
+                new mapboxgl.Popup()
+                  .setLngLat(e.lngLat)
+                  .setHTML(`
+                    <div class="text-xs space-y-1">
+                      <p class="font-bold border-b mb-2 text-primary text-sm">Station NOAA</p>
+                      <p>🌡️ Température: <b class="text-red-500">${temp}</b></p>
+                      <p>💧 Salinité: <b class="text-blue-500">${salt}</b></p>
+                      <p>🌿 Chlorophylle: <b class="text-green-500">${chla}</b></p>
+                      <p class="text-[9px] mt-2 pt-1 border-t text-gray-400 italic">Relevé: ${props.date || 'Récents'}</p>
+                    </div>
+                  `).addTo(map);
+              });
+
+              map.on('mouseenter', 'points-layer', () => map.getCanvas().style.cursor = 'pointer');
+              map.on('mouseleave', 'points-layer', () => map.getCanvas().style.cursor = '');
+
             } catch (err) {
-                console.error("Erreur lors de l'appel NOAA au clic :", err);
+              console.error("Erreur de chargement des données:", err);
+            } finally {
+              if (loader) loader.classList.remove('opacity-100');
             }
-        });
+          });
 
-        setTimeout(() => { map.resize(); }, 1000);
-    })();
-    </script>
-</main>
-<!-- ... (Reste du fichier Barba.js) ... -->
+          // Correction pour éviter la zone blanche après transition
+          setTimeout(() => map.resize(), 500);
+        };
+
+        // Lancement initial
+        if (document.readyState === 'complete') window.initMapPage();
+        else window.addEventListener('load', window.initMapPage);
+      </script>
+    </main>
   </div>
 
   <script src="https://unpkg.com/@barba/core"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script>
     barba.hooks.after((data) => {
-        const js = data.next.container.querySelectorAll('script');
-        js.forEach((item) => {
-            const script = document.createElement('script');
-            if (item.src) {
-                script.src = item.src;
-            } else {
-                script.innerHTML = item.innerHTML;
-            }
-            document.body.appendChild(script);
-        });
-        
-        // Force le redimensionnement de la carte après la transition Barba
-        if (data.next.namespace === 'map') {
-            setTimeout(() => { window.dispatchEvent(new Event('resize')); }, 500);
-        }
+      // Re-initialisation après navigation Barba
+      if (data.next.namespace === 'map') {
+        setTimeout(() => {
+          if (typeof window.initMapPage === 'function') window.initMapPage();
+        }, 500);
+      }
     });
 
     barba.init({
@@ -326,28 +184,14 @@
         name: 'transition-curtain',
         leave(data) {
           const done = this.async();
-          gsap.to('.transition-strip', {
-            scaleY: 1,
-            transformOrigin: 'top',
-            stagger: { each: 0.08, from: "random" },
-            duration: 0.8,
-            ease: 'power3.inOut',
-            onComplete: done
-          });
+          gsap.to('.transition-strip', { scaleY: 1, stagger: 0.08, duration: 0.8, onComplete: done });
         },
         enter(data) {
           gsap.set('.transition-strip', { transformOrigin: 'bottom', scaleY: 1 });
-          gsap.to('.transition-strip', {
-            scaleY: 0,
-            stagger: { each: 0.05, from: "end" },
-            duration: 0.8,
-            delay: 0.1,
-            ease: 'power3.inOut'
-          });
+          gsap.to('.transition-strip', { scaleY: 0, stagger: 0.05, duration: 0.8, delay: 0.1 });
         }
       }]
     });
   </script>
 </body>
-
 </html>

@@ -2,21 +2,22 @@
 // routes/api.php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\DataController;
+use App\Http\Controllers\Api\DataStatsController;
 use App\Enums\ZoneMaritime;
+use App\Http\Controllers\Api\DataController;
 //use App\Models\PointMesure;
 
 Route::middleware('api')->group(function () {
+    // 1. Routes pour la Carte
+
+    Route::get('/map/discovery', [DataController::class, 'getDiscoveryData']);
+
+    Route::get('/map-points', [DataController::class, 'getAllStoredPoints']);
     // Route principale pour récupérer les données des datasets
     // Utilise l'ID du dataset (SST ou Salinité) comme paramètre.
     // Exemple : /api/datasets/noaacwSMAPSSSDaily?time=...&latMin=...
-    // Appel NOAA + Cache
-    Route::get('/datasets/{datasetId}', [DataController::class, 'getDatasetData']);
-    
-    // Route pour récupérer tous les points stockés en BDD (pour la carte)
-    Route::get('/map-points', [DataController::class, 'getAllStoredPoints']);
-
-    Route::get('/stats', [DataController::class, 'getStats']);
+    Route::get('/datasets/{datasetId}', [DataStatsController::class, 'getDatasetData']);
+    Route::get('/stats', [DataStatsController::class, 'getStats']);
     Route::get('/zones', function () {
     // On transforme l'Enum en une liste utilisable par le FrontEnd
     $zones = collect(ZoneMaritime::cases())->map(fn($zone) => [

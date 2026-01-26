@@ -6,7 +6,14 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'App\\Enums\\ZoneMaritime' => $baseDir . '/app/Enums/ZoneMaritime.php',
+    'App\\Http\\Controllers\\Api\\Controller' => $baseDir . '/app/Http/Controllers/Api/Controller.php',
+    'App\\Http\\Controllers\\Api\\DataController' => $baseDir . '/app/Http/Controllers/Api/DataController.php',
     'App\\Http\\Controllers\\Controller' => $baseDir . '/app/Http/Controllers/Controller.php',
+    'App\\Models\\Chlorophylle' => $baseDir . '/app/Models/Chlorophylle.php',
+    'App\\Models\\PointMesure' => $baseDir . '/app/Models/PointMesure.php',
+    'App\\Models\\Salinite' => $baseDir . '/app/Models/Salinite.php',
+    'App\\Models\\Temperature' => $baseDir . '/app/Models/Temperature.php',
     'App\\Models\\User' => $baseDir . '/app/Models/User.php',
     'App\\Providers\\AppServiceProvider' => $baseDir . '/app/Providers/AppServiceProvider.php',
     'Attribute' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',

@@ -9,8 +9,8 @@ class PointMesure extends Model
 {
     use HasFactory;
 
-    // Sur Linux/Render, la casse est importante. Utilisez le nom EXACT de la table TiDB.
-    protected $table = 'point_mesures'; 
+    // Assurez-vous que le nom de la table est correct (sae3.01_pointmesure ou pointmesure)
+    protected $table = 'pointmesure'; 
     protected $primaryKey = 'PM_id';
     public $timestamps = false; // Pas de created_at/updated_at
 
@@ -32,10 +32,13 @@ class PointMesure extends Model
         return $this->hasOne(Salinite::class, 'PM_id');
     }
 
-    public function temperature()
+    public function temperature(){
+    // Utilisation de PM_id comme clé étrangère dans la table temperature
+    return $this->hasOne(Temperature::class, 'Point_id', 'PM_id');
+    }
+
+    public function chlorophylle()
     {
-        // Assurez-vous que la clé de liaison est correcte (Point_id ou PM_id)
-        // D'après votre schéma, c'est 'Point_id' dans la table 'temperature'.
-        return $this->hasOne(Temperature::class, 'Point_id');
+        return $this->hasOne(Chlorophylle::class, 'PM_id');
     }
 }
