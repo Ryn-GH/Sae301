@@ -157,10 +157,10 @@ class DataStatsController extends Controller
                 'error' => 'Erreur Serveur (Debug Actif)', 
                 'message' => $e->getMessage(),
                 'debug_db_config' => [
-                    'host' => config('database.connections.mysql.host'),
-                    'port' => config('database.connections.mysql.port'),
-                    'database' => config('database.connections.mysql.database'),
-                    'username' => config('database.connections.mysql.username'),
+                    'config_host' => config('database.connections.mysql.host'),
+                    'env_db_host' => env('DB_HOST'), // Ce que Laravel lit du .env ou du système
+                    'server_db_host' => $_SERVER['DB_HOST'] ?? 'NON DÉFINI', // Ce que le serveur fournit vraiment
+                    'available_env_keys' => array_keys($_SERVER), // Liste des clés disponibles
                 ]
             ], 500);
         }
