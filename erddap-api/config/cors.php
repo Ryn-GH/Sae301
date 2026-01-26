@@ -20,8 +20,8 @@ return [
     'allowed_methods' => ['*'],
 
     // C'EST ICI : On autorise tout pour le développement. 
-    // En production, vous pourrez mettre l'URL exacte de votre site Vercel.
-    'allowed_origins' => ['*'], 
+    // En production, il est VIVEMENT recommandé de limiter aux domaines autorisés.
+    'allowed_origins' => ['https://sae301-aquavision.vercel.app'], 
 
     'allowed_origins_patterns' => [],
 
