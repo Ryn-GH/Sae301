@@ -153,7 +153,16 @@ class DataStatsController extends Controller
             return response()->json($results);
         } catch (\Throwable $e) {
             \Log::error("Erreur DataStatsController: " . $e->getMessage());
-            return response()->json(['error' => 'Erreur Serveur', 'message' => $e->getMessage()], 500);
+            return response()->json([
+                'error' => 'Erreur Serveur (Debug Actif)', 
+                'message' => $e->getMessage(),
+                'debug_db_config' => [
+                    'host' => config('database.connections.mysql.host'),
+                    'port' => config('database.connections.mysql.port'),
+                    'database' => config('database.connections.mysql.database'),
+                    'username' => config('database.connections.mysql.username'),
+                ]
+            ], 500);
         }
     }
 
