@@ -37,8 +37,8 @@ Le projet repose sur une architecture découplée (séparation stricte entre le 
 
 ---
 
-## ⚙️ Points Techniques Avancés (Pour la soutenance)
+##  Points Techniques Avancés (Pour la soutenance)
 
 * **Pipeline CI/CD :** Le code source hébergé sur GitHub alimente automatiquement Vercel (Front) et Render (Back) à chaque mise à jour.
 * **Gestion du "Cold Start" Serverless :** Le back-end étant hébergé sur une instance gratuite (Render), il se met en veille en cas d'inactivité. L'application est conçue pour supporter ce délai de réveil initial (~30-50s) lors de la première requête.
-* **Cache Persistant (Stateful) :** Pour contrer l'amnésie (Stateless) du serveur Render lors de ses redémarrages, le système de cache de Laravel a été déporté directement dans la base de données TiDB (`CACHE_STORE=database`). Cela permet de conserver l'historique des "Cache Hits/Miss" de manière permanente.
+* **Cache Persistant (Stateful) :** Pour contrer l'amnésie (Stateless) du serveur Render lors de ses redémarrages, le système de cache de Laravel a été déporté directement dans la base de données TiDB. Cela permet de conserver l'historique des "Cache Hits/Miss" de manière permanente.
