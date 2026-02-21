@@ -4,7 +4,7 @@
 
 Ce projet a été réalisé dans le cadre de la **SAE 3.01** (Situation d'Apprentissage et d'Évaluation) et met en œuvre une architecture Cloud moderne, découplée et automatisée.
 
-🔗 **[Voir le site en direct (Live Demo)](https://sae301-aquavison.vercel.app/landing_page)**
+🔗 **[Voir le site en direct (Live Demo)](https://sae301-aquavision.vercel.app/landing_page)**
 
 ---
 
